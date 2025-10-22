@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currans Vanuatu Holiday</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px 25px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 20px;
+                border-radius: 20px;
+            }
+        }
+
+        .frangipani {
+            position: absolute;
+            font-size: 60px;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .frangipani-1 {
+            top: -20px;
+            left: -20px;
+            transform: rotate(-15deg);
+        }
+
+        .frangipani-2 {
+            bottom: -20px;
+            right: -20px;
+            transform: rotate(25deg);
+        }
+
+        .frangipani-3 {
+            top: 50%;
+            left: -30px;
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #764ba2;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        .converter-box {
+            background: linear-gradient(135deg, #f6f8fb 0%, #fff 100%);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e7ff;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            font-size: 24px;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 30px;
+            margin: 10px 0;
+            color: #667eea;
+        }
+
+        .rate-info {
+            text-align: center;
+            color: #718096;
+            font-size: 14px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin: 0 5px;
+        }
+
+        .day-selector {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #fff 100%);
+            padding: 25px 20px;
+            border-radius: 20px;
+            border: 2px solid #e0e7ff;
+        }
+
+        .day-selector h2 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .day-card {
+            background: white;
+            border: 3px solid #e0e7ff;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .day-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .day-card.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .day-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .day-date {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .day-card.active .day-date {
+            opacity: 1;
+        }
+
+        .save-status {
+            text-align: center;
+            color: #48bb78;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 8px;
+            margin-bottom: 15px;
+            background: #f0fff4;
+            border-radius: 8px;
+            border: 1px solid #9ae6b4;
+        }
+
+        .save-status.saving {
+            color: #667eea;
+            background: #ebf4ff;
+            border-color: #bee3f8;
+        }
+
+        .backup-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e7ff;
+        }
+
+        .backup-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 3px 8px rgba(72, 187, 120, 0.3);
+        }
+
+        .backup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(72, 187, 120, 0.4);
+        }
+
+        .backup-btn:active {
+            transform: translateY(0);
+        }
+
+        .spending-tracker {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #fff 100%);
+            padding: 25px 20px;
+            border-radius: 20px;
+            border: 2px solid #e0e7ff;
+        }
+
+        .tracker-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .tracker-header h2 {
+            color: #667eea;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .tracker-header h2 {
+                font-size: 22px;
+            }
+        }
+
+        .totals-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+
+        .total-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .total-label {
+            font-size: 12px;
+            opacity: 0.95;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 600px) {
+            .total-amount {
+                font-size: 20px;
+            }
+        }
+
+        .add-expense {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .add-expense input {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 2px solid #d0d9f5;
+            border-radius: 12px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .add-expense input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .add-expense input::placeholder {
+            color: #a0aec0;
+        }
+
+        .add-expense button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .add-expense button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .add-expense button:active {
+            transform: translateY(0);
+        }
+
+        .expense-list {
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 5px;
+            margin-top: 10px;
+        }
+
+        .expense-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .expense-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .expense-list::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .expense-item {
+            background: white;
+            padding: 16px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .expense-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .expense-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .expense-name {
+            font-weight: bold;
+            color: #2d3748;
+            font-size: 17px;
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 6px rgba(245, 101, 101, 0.3);
+            white-space: nowrap;
+        }
+
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(245, 101, 101, 0.4);
+        }
+
+        .delete-btn:active {
+            transform: translateY(0);
+        }
+
+        .expense-amounts {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 15px;
+            padding-top: 8px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .expense-aud {
+            color: #667eea;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .expense-vatu {
+            color: #718096;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #a0aec0;
+            padding: 50px 20px;
+            font-style: italic;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="frangipani frangipani-1">🌺</div>
+        <div class="frangipani frangipani-2">🌺</div>
+        <div class="frangipani frangipani-3">🌺</div>
+        
+        <div class="content">
+            <h1>🌴 Currans Vanuatu Holiday 🌴</h1>
+            <p class="subtitle">Currency Converter</p>
+            
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Australian Dollars (AUD) 🦘</label>
+                    <input type="number" id="aud" placeholder="0" step="0.01" min="0">
+                </div>
+                
+                <div class="arrow">⇅</div>
+                
+                <div class="input-group">
+                    <label>Vanuatu Vatu (VT) 🏝️</label>
+                    <input type="number" id="vatu" placeholder="0" step="1" min="0">
+                </div>
+            </div>
+            
+            <div class="rate-info">
+                <span class="emoji">💱</span>
+                <strong>Exchange Rate:</strong> $1 AUD = 79 VT
+                <span class="emoji">🌺</span>
+            </div>
+
+            <div class="day-selector">
+                <h2>📅 Select Day</h2>
+                <div class="days-grid" id="daysGrid"></div>
+            </div>
+
+            <div class="spending-tracker">
+                <div class="tracker-header">
+                    <h2>💰 Spending Tracker 💰</h2>
+                    <div class="totals-container">
+                        <div class="total-box">
+                            <div class="total-label">Total Spent (AUD)</div>
+                            <div class="total-amount" id="totalAud">$0.00</div>
+                        </div>
+                        <div class="total-box">
+                            <div class="total-label">Total Spent (VT)</div>
+                            <div class="total-amount" id="totalVatu">0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="save-status" id="saveStatus">✓ Auto-saving enabled</div>
+                
+                <div class="add-expense">
+                    <input type="text" id="expenseName" placeholder="What did you buy? 🛍️">
+                    <input type="number" id="expenseAmount" placeholder="Amount in VT" step="1" min="0">
+                    <button onclick="addExpense()">➕ Add</button>
+                </div>
+                
+                <div class="expense-list" id="expenseList">
+                    <div class="empty-state">No expenses yet. Start tracking! 🌴🌺</div>
+                </div>
+                
+                <div class="backup-buttons">
+                    <button onclick="exportData()" class="backup-btn">📥 Export Data</button>
+                    <button onclick="importData()" class="backup-btn">📤 Import Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audInput = document.getElementById('aud');
+        const vatuInput = document.getElementById('vatu');
+        const rate = 79;
+
+        // Currency Converter
+        audInput.addEventListener('input', function() {
+            const audValue = parseFloat(this.value) || 0;
+            vatuInput.value = Math.round(audValue * rate);
+        });
+
+        vatuInput.addEventListener('input', function() {
+            const vatuValue = parseFloat(this.value) || 0;
+            audInput.value = (vatuValue / rate).toFixed(2);
+        });
+
+        // Day Selector
+        let selectedDay = localStorage.getItem('selectedDay') || 'Sat 18 Oct';
+        
+        const days = [
+            { name: 'Sat', date: '18 Oct' },
+            { name: 'Sun', date: '19 Oct' },
+            { name: 'Mon', date: '20 Oct' },
+            { name: 'Tue', date: '21 Oct' },
+            { name: 'Wed', date: '22 Oct' },
+            { name: 'Thu', date: '23 Oct' },
+            { name: 'Fri', date: '24 Oct' },
+            { name: 'Sat', date: '25 Oct' },
+            { name: 'Sun', date: '26 Oct' },
+            { name: 'Mon', date: '27 Oct' }
+        ];
+
+        function renderDays() {
+            const daysGrid = document.getElementById('daysGrid');
+            daysGrid.innerHTML = days.map(day => {
+                const dayId = `${day.name} ${day.date}`;
+                const isActive = dayId === selectedDay ? 'active' : '';
+                return `
+                    <div class="day-card ${isActive}" onclick="selectDay('${dayId}')">
+                        <div class="day-name">${day.name}</div>
+                        <div class="day-date">${day.date}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectDay(dayId) {
+            selectedDay = dayId;
+            localStorage.setItem('selectedDay', dayId);
+            renderDays();
+            renderExpenses();
+        }
+
+        // Spending Tracker
+        let allExpenses = JSON.parse(localStorage.getItem('vanuatuExpenses')) || {};
+
+        function getExpenses() {
+            return allExpenses[selectedDay] || [];
+        }
+
+        function saveExpenses(expenses) {
+            allExpenses[selectedDay] = expenses;
+            localStorage.setItem('vanuatuExpenses', JSON.stringify(allExpenses));
+            showSaveStatus();
+        }
+
+        function showSaveStatus() {
+            const status = document.getElementById('saveStatus');
+            status.textContent = '✓ Saved!';
+            status.classList.add('saving');
+            setTimeout(() => {
+                status.textContent = '✓ Auto-saving enabled';
+                status.classList.remove('saving');
+            }, 1500);
+        }
+
+        function renderExpenses() {
+            const expenses = getExpenses();
+            const expenseList = document.getElementById('expenseList');
+            
+            if (expenses.length === 0) {
+                expenseList.innerHTML = '<div class="empty-state">No expenses yet. Start tracking! 🌴🌺</div>';
+                updateTotal();
+                return;
+            }
+
+            expenseList.innerHTML = expenses.map((expense, index) => `
+                <div class="expense-item">
+                    <div class="expense-header">
+                        <div class="expense-name">${expense.name}</div>
+                        <button class="delete-btn" onclick="deleteExpense(${index})">Delete</button>
+                    </div>
+                    <div class="expense-amounts">
+                        <div class="expense-aud">$${(expense.amountVT / rate).toFixed(2)}</div>
+                        <div class="expense-vatu">${expense.amountVT.toLocaleString()} VT</div>
+                    </div>
+                </div>
+            `).join('');
+
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const expenses = getExpenses();
+            const totalVT = expenses.reduce((sum, expense) => sum + expense.amountVT, 0);
+            const totalAud = totalVT / rate;
+            
+            document.getElementById('totalAud').textContent = `$${totalAud.toFixed(2)}`;
+            document.getElementById('totalVatu').textContent = totalVT.toLocaleString();
+        }
+
+        function addExpense() {
+            const name = document.getElementById('expenseName').value.trim();
+            const amountVT = parseFloat(document.getElementById('expenseAmount').value);
+
+            if (!name || !amountVT || amountVT <= 0) {
+                alert('Please enter both a name and valid amount!');
+                return;
+            }
+
+            const expenses = getExpenses();
+            expenses.push({ name, amountVT });
+            saveExpenses(expenses);
+            
+            document.getElementById('expenseName').value = '';
+            document.getElementById('expenseAmount').value = '';
+            
+            renderExpenses();
+        }
+
+        function deleteExpense(index) {
+            const expenses = getExpenses();
+            expenses.splice(index, 1);
+            saveExpenses(expenses);
+            renderExpenses();
+        }
+
+        // Export/Import functions
+        function exportData() {
+            const dataStr = JSON.stringify({
+                expenses: allExpenses,
+                selectedDay: selectedDay
+            }, null, 2);
+            
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `vanuatu-expenses-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            alert('✓ Data exported! Save this file to backup your expenses.');
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        allExpenses = data.expenses || {};
+                        selectedDay = data.selectedDay || 'Sat 18 Oct';
+                        
+                        localStorage.setItem('vanuatuExpenses', JSON.stringify(allExpenses));
+                        localStorage.setItem('selectedDay', selectedDay);
+                        
+                        renderDays();
+                        renderExpenses();
+                        
+                        alert('✓ Data imported successfully!');
+                    } catch (error) {
+                        alert('Error importing data. Please check the file format.');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        // Allow Enter key to add expense
+        document.getElementById('expenseAmount').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addExpense();
+            }
+        });
+
+        document.getElementById('expenseName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('expenseAmount').focus();
+            }
+        });
+
+        // Load days and expenses on page load
+        renderDays();
+        renderExpenses();
+    </script>
+</body>
+</html>
